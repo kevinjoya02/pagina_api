@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi Tienda</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container my-5">
+    <h1 class="text-center mb-4">Mi Tienda</h1>
+    <h3 class="mb-3">Categorías</h3>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs" id="tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#camisas" type="button" role="tab" aria-controls="camisas" aria-selected="true">Camisas</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pantalones" type="button" role="tab" aria-controls="pantalones" aria-selected="false">Pantalones</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#camisetas" type="button" role="tab" aria-controls="camisetas" aria-selected="false">Camisetas</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#blusas" type="button" role="tab" aria-controls="blusas" aria-selected="false">Blusas</button>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content mt-4">
+
+      <!-- CAMISAS -->
+      <div class="tab-pane fade show active" id="camisas" role="tabpanel">
+        <div class="row productos-categoria" id="productos-camisas">
+          <!-- Aquí se cargarán los productos desde la API -->
+        </div>
+      </div>
+
+      <!-- PANTALONES -->
+      <div class="tab-pane fade" id="pantalones" role="tabpanel">
+        <div class="row productos-categoria" id="productos-pantalones">
+          <!-- Aquí se cargarán los productos desde la API -->
+        </div>
+      </div>
+
+      <!-- CAMISETAS -->
+      <div class="tab-pane fade" id="camisetas" role="tabpanel">
+        <div class="row productos-categoria" id="productos-camisetas">
+          <!-- Aquí se cargarán los productos desde la API -->
+        </div>
+      </div>
+
+      <!-- BLUSAS -->
+      <div class="tab-pane fade" id="blusas" role="tabpanel">
+        <div class="row productos-categoria" id="productos-blusas">
+          <!-- Aquí se cargarán los productos desde la API -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--modal-->
+<!-- Modal de Compra -->
+<div class="modal fade" id="modalCompra" tabindex="-1" aria-labelledby="modalCompraLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCompraLabel">Confirmación de Compra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p id="mensajeCompra">Tu producto será entregado próximamente 🚚</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnAceptarCompra" class="btn btn-success">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Tu JS que consume la API -->
+  <script src="{{ url_for('static', filename='/consumir_api.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -3,11 +3,18 @@ function CrearProductoHTML(producto) {
   return `
     <div class="col-md-4 mb-4">
       <div class="card">
-        <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" />
+        <img src="${producto.imagen}" class="card-img-top"  />
         <div class="card-body">
           <h5 class="card-title">${producto.nombre}</h5>
           <p class="card-text">${producto.descripcion}</p>
           <p><strong>$${producto.precio.toFixed(2)}</strong></p>
+          <button 
+            class="btn btn-primary comprar-btn" 
+            data-nombre="${producto.nombre}" 
+            data-id="${producto.id}"
+          >
+            comprar
+          </button>
         </div>
       </div>
     </div>
@@ -29,7 +36,7 @@ async function cargarProductos(categoria) {
 
   try {
     // Llamar a la API con fetch
-    const response = await fetch(`/api/products/${categoria}`);
+    const response = await fetch(`/api/productos/${categoria}`);
 
     if (!response.ok) {
       throw new Error("Error al cargar los productos");
@@ -49,6 +56,39 @@ async function cargarProductos(categoria) {
 
     // Insertar el html en el contenedor
     contenedor.innerHTML = htmlProductos;
+
+const botonesComprar = contenedor.querySelectorAll(".comprar-btn");
+botonesComprar.forEach(boton => {
+  boton.addEventListener("click", () => {
+    const nombreProducto = boton.getAttribute("data-nombre");
+
+    // Cambiamos el texto del modal dinámicamente
+    const mensajeCompra = document.getElementById("mensajeCompra");
+    mensajeCompra.textContent = `Tu producto "${nombreProducto}" será entregado próximamente 🚚`;
+
+    // Mostramos el modal con Bootstrap
+    const modalCompraEl = document.getElementById("modalCompra");
+    const modal = new bootstrap.Modal(modalCompraEl);
+    modal.show();
+
+    // Agregamos el evento al botón "Aceptar"
+    const btnAceptar = document.getElementById("btnAceptarCompra");
+btnAceptar.onclick = async () => {
+  modal.hide(); // Cierra el modal
+
+  // Eliminamos visualmente la tarjeta del producto
+  const card = boton.closest(".col-md-4");
+  if (card) card.remove();
+
+  // Eliminamos del backend (temporal en memoria)
+  const productoId = boton.getAttribute("data-id");
+  const categoria = contenedor.id.replace('productos-', '');
+  await fetch(`/api/productos/${categoria}/${productoId}`, { method: "DELETE" });
+
+  alert(`✅ Has comprado "${nombreProducto}" y se eliminó de la lista.`);
+};
+  });
+});
 
   } catch (error) {
     // Mostrar mensaje en el contenedor en caso de error
