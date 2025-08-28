@@ -3,7 +3,11 @@ function CrearProductoHTML(producto) {
   return `
     <div class="col-md-4 mb-4">
       <div class="card">
-        <img src="${producto.imagen}" class="card-img-top"  />
+        <img 
+          src="${producto.imagen}" 
+          class="card-img-top"  
+          style="width: 100%; height: 200px; object-fit: contain;" 
+        />
         <div class="card-body">
           <h5 class="card-title">${producto.nombre}</h5>
           <p class="card-text">${producto.descripcion}</p>
@@ -11,8 +15,7 @@ function CrearProductoHTML(producto) {
           <button 
             class="btn btn-primary comprar-btn" 
             data-nombre="${producto.nombre}" 
-            data-id="${producto.id}"
-          >
+            data-id="${producto.id}">
             comprar
           </button>
         </div>
@@ -20,6 +23,7 @@ function CrearProductoHTML(producto) {
     </div>
   `;
 }
+
 
 // Función para cargar los productos desde la API según la categoría
 async function cargarProductos(categoria) {
@@ -59,12 +63,26 @@ async function cargarProductos(categoria) {
 
 const botonesComprar = contenedor.querySelectorAll(".comprar-btn");
 botonesComprar.forEach(boton => {
-  boton.addEventListener("click", () => {
+  boton.addEventListener("click", async () => {
     const nombreProducto = boton.getAttribute("data-nombre");
+    
+    //obtener fecha de entrega desde la API
+    let fechaEntrega = "proximamente";
+    try 
+    {
+      const response = await fetch("/api/fecha_entrega");
+      const data = await response.json();
+      fechaEntrega = data.fecha_entrega;
+
+    } 
+    catch (error) 
+    {
+      console.error("Error al obtener fecha de entrega:", error);
+    }
 
     // Cambiamos el texto del modal dinámicamente
     const mensajeCompra = document.getElementById("mensajeCompra");
-    mensajeCompra.textContent = `Tu producto "${nombreProducto}" será entregado próximamente 🚚`;
+    mensajeCompra.textContent = `Tu producto "${nombreProducto}" será entregado el ${fechaEntrega} 🚚`;
 
     // Mostramos el modal con Bootstrap
     const modalCompraEl = document.getElementById("modalCompra");
@@ -85,7 +103,7 @@ btnAceptar.onclick = async () => {
   const categoria = contenedor.id.replace('productos-', '');
   await fetch(`/api/productos/${categoria}/${productoId}`, { method: "DELETE" });
 
-  alert(`✅ Has comprado "${nombreProducto}" y se eliminó de la lista.`);
+  alert(`✅ Has comprado "${nombreProducto}".`);
 };
   });
 });
